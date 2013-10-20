@@ -40,22 +40,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		ButtonGridView buttons = (ButtonGridView) findViewById(R.id.buttons);
+		GridView buttons = (GridView) findViewById(R.id.buttons);
 		buttons.setOnItemClickListener(listener);
-		CalculatorButton[] calculatorButtons = new CalculatorButton[MainActivity.buttons.length];
-		for(int i = 0; i < calculatorButtons.length; i++) {
-			calculatorButtons[i] = new CalculatorButton(this, this.getResources().getLayout(R.layout.button));
-			calculatorButtons[i].setText(MainActivity.buttons[i]);
-			calculatorButtons[i].setType(MainActivity.buttonClasses[i]);
-			System.out.println("calculatorButtons[" + i + "]: " + calculatorButtons[i]);
-		}
 		ArrayAdapter<String> buttonAdapter = new ArrayAdapter<String>(this, 
 				R.layout.button, 
 				MainActivity.buttons);
 		buttons.setAdapter(buttonAdapter);
-		System.out.println("buttonAdapter.getCount():" + buttonAdapter.getCount());
-		TextView tv = (TextView) findViewById(R.id.expr);
-		tv.setText("buttonAdapter.getCount(): " + buttonAdapter.getCount());
 	}
 	
 	@Override
@@ -66,19 +56,9 @@ public class MainActivity extends Activity {
 	}
 	
 	public void whoooo(View v) {
-		CalculatorButton cb = (CalculatorButton) v;
 		TextView tv = (TextView) findViewById(R.id.expr);
-		System.out.println("a");
 		GridView gr = (GridView) findViewById(R.id.buttons);
-		System.out.println("b");
 		Integer i = gr.indexOfChild(v);
 		tv.setText(MainActivity.buttonClasses[i]);
-		System.out.println(v);
-	}
-	
-	public void a(View v) {
-		System.out.println("I am inside the a method");
-	}
-	
-	
+	}	
 }
