@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
+
+<haus.matt.calculator.CalculatorButton xmlns:android="http://schemas.android.com/apk/res/android"
+    class="haus.matt.Calculator.CalculatorButton"
     android:layout_width="50dp"
     android:layout_height="50dp"
     android:onClick="whoooo" >
-    
-
-</Button>
+</haus.matt.calculator.CalculatorButton>
