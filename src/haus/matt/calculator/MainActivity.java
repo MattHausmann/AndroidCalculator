@@ -81,41 +81,21 @@ public class MainActivity extends Activity {
 	//TODO this
 	private void sign() {
 		String expr = display.getText().toString();
-		if(expr.length() == 0) {
-			display.setText("(-");
-			return;
-		}
-		if(expr.endsWith("(-")) {
-			display.setText(expr.substring(0, expr.length() - 2));
-			return;
-		}
-		//now we know we're displaying at least one character
-		char c = expr.charAt(expr.length() - 1);
-		if(c == ')') {
-			display.setText(expr + "X(-");
-			return;
-		}
-		if(isNumericCharacter(c)) {
-			int indexOfFinalNonNumericCharacter = expr.length() - 1;
-			while(indexOfFinalNonNumericCharacter >= 0) {
-				c = expr.charAt(indexOfFinalNonNumericCharacter);
-				if(!isNumericCharacter(c)) {//if we've found a non-number...
-					if(c == '-') {//is this a negative number?
-						if(expr.charAt(indexOfFinalNonNumericCharacter-1) == '(') {
-							//delete (-
-							display.setText(expr.substring(0, indexOfFinalNonNumericCharacter-1) + expr.substring(indexOfFinalNonNumericCharacter));
-						} else {
-							display.setText(expr.substring(0, indexOfFinalNonNumericCharacter) + "(-" + expr.substring(indexOfFinalNonNumericCharacter));
-						}
-						return;
-					} else {
-						
-					}
-				}
-				indexOfFinalNonNumericCharacter--;
+		int index = indexOfStringTerminalInt(expr);
+		System.out.println("index: " + index);
+		if(index == -1) {
+			if(expr.endsWith(")")) {
+				display.setText(expr + "X(-");
+				return;
 			}
-		} else {
 			display.setText(expr + ("(-"));
+			return;
+		}
+		System.out.println("expr.charAt(index) = " + expr.charAt(index));
+		if(isDigit(expr.charAt(index))) {
+			display.setText(expr.substring(0, index) + "(-" + expr.substring(index));
+		} else {
+			display.setText(expr.substring(0, index) + expr.substring(index+2));
 		}
 	}
 
@@ -199,5 +179,46 @@ public class MainActivity extends Activity {
 	}
 	private boolean isDigit(char c) {
 		return '0' <= c && c <= '9';
+	}
+	
+	private int indexOfStringTerminalInt(String s) {
+		char c = s.charAt(s.length() - 1);
+		if(isDigit(c)) {
+			for(int i = s.length() - 1; i >= 0; i--) {
+				if(!isDigit(s.charAt(i))) {
+					if(s.charAt(i) == '-') {
+						if(i >= 1) {
+							if(s.charAt(i-1) == '(') {
+								return i-1;
+							}
+						}
+					}
+					return i+1;
+				}
+			}
+			return 0;
+		} else if(c == ')') {//hope it's negative
+			int i = s.length() - 2;//penultimate character
+			while(i >= 0) {
+				c = s.charAt(i);
+				if(!isDigit(c)) { //if we have a non-digit character...
+					if(c == '-') { //hope it's negative...
+						if(i >= 1) {
+							if(s.charAt(i-1) == '(') {//if it is negative
+								return i-1;
+							} else {
+								return -1;
+							}
+						} else { //if the first character is "-"
+							return -1;
+						}
+					} else {
+						return -1;
+					}
+				}
+				i--;
+			}
+		}
+		return -1;
 	}
 }
