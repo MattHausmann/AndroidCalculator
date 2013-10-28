@@ -161,13 +161,22 @@ public class MainActivity extends Activity {
 		String text = display.getText().toString();
 		if(text.length() == 0) {
 			display.setText("(");
+			nestingLevel++;
 		}
 		else {
 			char c = text.charAt(text.length()-1);
 			if(c == ')' || ('0' <= c && c <= '9')) {
-				display.setText(text + ")");
+				if(nestingLevel > 0) {
+					display.setText(text + ")");
+					nestingLevel--;	
+				} else {
+					display.setText(text + "X(");
+					nestingLevel++;
+				}
+				
 			} else {
 				display.setText(text + "(");
+				nestingLevel++;
 			}
 		}
 	}
